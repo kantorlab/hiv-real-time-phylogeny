@@ -1,0 +1,18 @@
+Import("*")
+
+for alignment in alignments:
+    for dataset in datasets:
+        name = "{}.{}".format(alignment, dataset)
+        Command(["RAxML_info.{}".format(name),
+                 "RAxML_bestTree.{}".format(name),
+                 "RAxML_bipartitions.{}".format(name),
+                 "RAxML_bipartitionsBranchLabels.{}".format(name),
+                 "RAxML_bootstrap.{}".format(name),
+                 "$ANALYSIS/alignments/{}/{}.fa.reduced".format(alignment, dataset)],
+                ["$ANALYSIS/alignments/{}/{}.fa".format(alignment, dataset)],
+                "raxmlHPC-MPI-AVX -f a -s $SOURCE -n {} -N 100 -m GTRCAT -w $ANALYSIS/phylogenies/raxml -p 7845651 -x 285611 -o O.BE.87.ANT70.L20587,O.CM.91.MVP5180.L20571,O.CM.98.98CMU2901.AY169812,O.SN.99.99SE_MP1300.AJ302647".format(name),
+                mpi_dedicated=True,
+                cpus=20,
+                timelimit="7-00:00:00")
+
+# vim: syntax=python expandtab sw=4 ts=4

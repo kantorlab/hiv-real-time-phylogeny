@@ -1,0 +1,47 @@
+Import("*")
+
+tree_outputs = {
+    "raxml": "$ANALYSIS/phylogenies/raxml/RAxML_bipartitions.{alignment}.{dataset}",
+    "iqtree": "$ANALYSIS/phylogenies/iqtree/{alignment}.{dataset}.treefile",
+    "iqtree-uf": "$ANALYSIS/phylogenies/iqtree-uf/{alignment}.{dataset}.treefile",
+    "fasttree": "$ANALYSIS/phylogenies/fasttree/{alignment}.{dataset}.nwk",
+    "fasttree-alrt": "$ANALYSIS/phylogenies/fasttree-alrt/{alignment}.{dataset}.nwk",
+    "mega": "$ANALYSIS/phylogenies/mega/{alignment}.{dataset}.nwk"
+}
+cluster_params = {
+    "raxml": (80, 0.045),
+    "iqtree": (80, 0.045),
+    "iqtree-uf": (95, 0.03),
+    "fasttree": (80, 0.045),
+    "fasttree-alrt": (0.9, 0.03),
+    "mega": (0.8, 0.045)
+}
+
+for dataset in datasets:
+    for alignment in alignments:
+        for phylogeny in phylogenies:
+            name = "{}.{}.{}".format(alignment, dataset, phylogeny)
+            params = cluster_params[phylogeny]
+            Command("{}.fa".format(name),
+                    "$ANALYSIS/alignments/{}/{}.fa".format(alignment, dataset),
+                    "cp $SOURCE $TARGET")
+            Command("{}.nwk".format(name),
+                    tree_outputs[phylogeny].format(alignment=alignment, dataset=dataset),
+                    "cp $SOURCE $TARGET")
+            Command(["{}_clusterPicks.nwk".format(name),
+                     "{}_clusterPicks.nwk.figTree".format(name),
+                     "{}_clusterPicks_log.txt".format(name)],
+                    ["ClusterPicker_1.2.3.jar",
+                     "{}.fa".format(name),
+                     "{}.nwk".format(name),
+                     Value(params[0]), Value(params[0]), Value(params[1]), Value(0), Value("ambiguity")],
+                    "java -jar $SOURCES")
+            Command("{}.clusters.tsv".format(name),
+                    ["clusters.py",
+                     "{}_clusterPicks_log.txt".format(name)],
+                    "python $SOURCES $TARGET")
+        Command("{}.{}.clusters.tsv".format(alignment, dataset),
+                ["merge.py"] + ["{}.{}.{}.clusters.tsv".format(alignment, dataset, phylogeny) for phylogeny in phylogenies],
+                "python $SOURCES $TARGET")
+
+# vim: syntax=python expandtab sw=4 ts=4

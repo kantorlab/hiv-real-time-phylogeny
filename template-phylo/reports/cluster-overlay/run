@@ -1,0 +1,15 @@
+Import("*")
+
+for dataset in datasets:
+    for alignment in alignments:
+        name = "{}.{}".format(alignment, dataset)
+        Command("{}.dot".format(name),
+                ["cluster-overlay.py",
+                 "$ANALYSIS/clusters/hivtrace/{}.005.clusters.tsv".format(dataset),
+                 "$ANALYSIS/clusters/clusterpicker/{}.clusters.tsv".format(name)],
+                "python $SOURCES $TARGET")
+        Command("{}.dot.pdf".format(name),
+                "{}.dot".format(name),
+                "neato -Tpdf -O $SOURCE")
+
+# vim: syntax=python expandtab sw=4 ts=4

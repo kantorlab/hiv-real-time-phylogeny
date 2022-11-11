@@ -1,0 +1,24 @@
+Import("*")
+
+for alignment in alignments:
+    for dataset in datasets:
+        name = "{}.{}".format(alignment, dataset)
+        Command(["{}.bootstraps.phy".format(name)],
+                ["bootstraps.sh",
+                 "$ANALYSIS/alignments/{}/{}.fa.reduced".format(alignment, dataset)],
+                "bash $SOURCES $TARGET")
+        Command(["{}.bootstraps.nwk".format(name)],
+                ["{}.bootstraps.phy".format(name)],
+                "FastTreeMP -gtr -gamma -nt -mlacc 2 -slownni -n 100 $SOURCE > $TARGET",
+                cpus=16,
+                timelimit="7-00:00:00")
+        Command(["{}.nhx".format(name)],
+                ["$ANALYSIS/phylogenies/fasttree-alrt/{}.nwk".format(name),
+                 "{}.bootstraps.nwk".format(name)],
+                "sumtrees.py --allow-unknown-target-tree-taxa -F newick -d0 -p -o $TARGET -t $SOURCES")
+        Command(["{}.nwk".format(name)],
+                ["convert.py",
+                 "{}.nhx".format(name)],
+                "python $SOURCES $TARGET")
+
+# vim: syntax=python expandtab sw=4 ts=4

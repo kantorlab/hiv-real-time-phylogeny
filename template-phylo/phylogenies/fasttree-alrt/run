@@ -1,0 +1,12 @@
+Import("*")
+
+for alignment in alignments:
+    for dataset in datasets:
+        name = "{}.{}".format(alignment, dataset)
+        Command(["{}.nwk".format(name)],
+                ["$ANALYSIS/alignments/{}/{}.fa".format(alignment, dataset)],
+                "FastTreeMP -gtr -gamma -nt -mlacc 2 -slownni $SOURCE > $TARGET",
+                cpus=16,
+                timelimit="7-00:00:00")
+
+# vim: syntax=python expandtab sw=4 ts=4

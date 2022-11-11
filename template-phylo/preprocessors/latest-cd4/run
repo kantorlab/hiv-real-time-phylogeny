@@ -1,0 +1,9 @@
+Import("*")
+
+for dataset in datasets:
+    Command("{}.csv".format(dataset),
+            ["latest-cd4.py",
+             "$DATASETS/{}/cd4.csv".format(dataset)],
+            "python $SOURCES $TARGET")
+
+# vim: syntax=python expandtab sw=4 ts=4

@@ -1,0 +1,19 @@
+Import("*")
+
+thresholds = ["005", "015"]
+
+for dataset in datasets:
+    for threshold in thresholds:
+        Command("{}.{}.fa".format(dataset, threshold),
+                "$DATASETS/{}/sequences.fa".format(dataset),
+                "cp $SOURCE $TARGET")
+        Command("{}.{}.results.json".format(dataset, threshold),
+                "{}.{}.fa".format(dataset, threshold),
+                "hivtrace -i $SOURCE -a resolve -r HXB2_prrt -t .{} -m 500 -g .05 -c -o $TARGET".format(threshold),
+                mem_per_cpu=20,
+                timelimit="24:00:00")
+        Command("{}.{}.clusters.tsv".format(dataset, threshold),
+                ["clusters.py", "{}.{}.results.json".format(dataset, threshold)],
+                "python $SOURCES $TARGET")
+
+# vim: syntax=python expandtab sw=4 ts=4

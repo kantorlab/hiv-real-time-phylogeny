@@ -1,0 +1,62 @@
+import os
+
+required = ["RTP_CACHE", "RTP_DATASETS", "RTP_ANALYSES"]
+notfound = [var for var in required if var not in os.environ]
+if notfound:
+    raise ValueError("environment variables are unset: {}".format(", ".join(notfound)))
+
+assert "RTP_BRANCH" in os.environ, """
+    The environment variable RTP_BRANCH is missing.
+    Did you run "scons" directly instead of using "./build"?"""
+
+code = Dir("#").abspath
+print("CODE     :", code)
+
+branch = os.environ["RTP_BRANCH"]
+print("BRANCH   :", branch)
+
+cache = os.environ["RTP_CACHE"]
+print("CACHE    :", cache)
+
+datasets = os.environ["RTP_DATASETS"]
+print("DATASETS :", datasets)
+
+analyses = os.environ["RTP_ANALYSES"]
+print("ANALYSES :", analyses)
+
+analysis = os.path.join(os.environ["RTP_ANALYSES"], branch.rpartition("-")[2])
+print("ANALYSIS :", analysis)
+
+srun = os.environ.get("SRUN", "srun")
+print("SRUN     :", srun)
+
+VariantDir(analysis, code, duplicate=0)
+env = Environment(ANALYSES=analyses,
+                  ANALYSIS=analysis,
+                  CODE=code,
+                  DATASETS=datasets,
+                  ENV=os.environ,
+                  SRUN=srun)
+env.CacheDir(cache)
+env.Decider("MD5-timestamp")
+Export("env")
+
+def Command(targets, sources, cmd, log=True, cpus=1, mem_per_cpu=3, timelimit=60, mpi=False, mpi_dedicated=False):
+    global srun, env
+    if isinstance(targets, str):
+        targets = [targets]
+    if mpi_dedicated:
+        cmd = "srun -N 1-1 -n {} -t {} --mpi=pmix {}".format(cpus, timelimit, cmd)
+    elif mpi:
+        cmd = "srun -n {} -t {} --mpi=pmix {}".format(cpus, timelimit, cmd)
+    else:
+        cmd = "{} -c {} --mem={}G -t {} sh -c '{}'".format(srun, cpus, cpus*mem_per_cpu, timelimit, cmd.replace("$CPUS", str(cpus)))
+    if log:
+        logfile = targets[0] + ".log"
+        targets.append(logfile)
+        cmd = "{} &> ${{TARGETS[{}]}}".format(cmd, len(targets)-1)
+    return env.Command(targets, sources, cmd)
+
+Export("Command")
+
+# vim: syntax=python expandtab sw=4 ts=4

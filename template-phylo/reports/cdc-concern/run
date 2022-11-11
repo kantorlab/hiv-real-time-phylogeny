@@ -1,0 +1,19 @@
+Import("*")
+
+for dataset in datasets:
+
+    Command("{}.hivtrace.csv".format(dataset),
+            ["cdc-concern.py",
+             "$ANALYSIS/clusters/hivtrace/{}.005.clusters.tsv".format(dataset),
+             "$DATASETS/{}/patients.csv".format(dataset)],
+            "python $SOURCES $TARGET")
+
+    for alignment in alignments:
+        name = "{}.{}".format(alignment, dataset)
+        Command("{}.clusterpicker.csv".format(name),
+                ["cdc-concern.py",
+                 "$ANALYSIS/clusters/clusterpicker/{}.clusters.tsv".format(name),
+                 "$DATASETS/{}/patients.csv".format(dataset)],
+                "python $SOURCES $TARGET")
+
+# vim: syntax=python expandtab sw=4 ts=4

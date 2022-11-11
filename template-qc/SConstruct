@@ -1,0 +1,38 @@
+# Setup
+
+SConscript("scons/setup")
+
+# Datasets
+
+Export(datasets=[INSERT_DATASET_NAME_HERE])
+Export(new_seq_start=INSERT_START_SEQUENCE_ID_HERE)
+
+# Preprocessors
+
+Export(preprocessors=["sierra"])
+
+# Alignments
+
+Export(alignments=["mafft"])
+
+# QC
+
+Export(qc=["edit-distance"])
+
+# Phylogenies
+
+Export(phylogenies=[])
+
+# Clusters
+
+Export(clusters=[])
+
+# Reports
+
+Export(reports=["qc"])
+
+# Run
+
+SConscript("scons/run")
+
+# vim: syntax=python expandtab sw=4 ts=4

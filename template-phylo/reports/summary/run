@@ -1,0 +1,37 @@
+Import("*")
+
+alignment = "mafft"
+
+for dataset in datasets:
+
+    name = "{}.{}".format(alignment, dataset)
+
+    Command(["{}.summary.csv".format(name)],
+            ["summary.py",
+             "$ANALYSIS/clusters/clusterpicker/{}.clusters.tsv".format(name),
+             "$ANALYSIS/reports/cdc-concern/{}.clusterpicker.csv".format(name),
+             "$DATASETS/{}/patients.csv".format(dataset),
+             "$DATASETS/{}/sequences.csv".format(dataset),
+             "$ANALYSIS/preprocessors/sierra/{}.csv".format(dataset)],
+            "python $SOURCES $TARGET")
+
+    Command(["{}_Segmental.pdf".format(dataset)],
+            ["plot.R",
+             "$DATASETS/{}/patients.csv".format(dataset),
+             "$DATASETS/{}/new_seq_ids.csv".format(dataset),
+             "$ANALYSIS/clusters/clusterpicker/{}.clusters.tsv".format(name),
+             "$DATASETS/{}/treatment.csv".format(dataset),
+             Value(dataset)],
+            "Rscript $SOURCES $TARGET")
+
+    Command(["{}_Report.tex".format(dataset)],
+            ["report.py",
+             "$ANALYSIS/reports/individual/{}_Individual_Reports.tex".format(dataset),
+             "{}_Segmental.pdf".format(dataset),
+             Value(dataset)],
+            "python $SOURCES $TARGET")
+
+    env.PDF("{}_Report.pdf".format(dataset),
+            "{}_Report.tex".format(dataset))
+
+# vim: syntax=python expandtab sw=4 ts=4

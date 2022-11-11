@@ -1,0 +1,15 @@
+Import("*")
+
+for dataset in datasets:
+    Command("{}.with_ref.fa".format(dataset),
+            ["subtype_O.fa",
+             "$DATASETS/{}/sequences.fa".format(dataset)],
+            "cat $SOURCES > $TARGET")
+    Command("{}.mafft.fa".format(dataset),
+            "{}.with_ref.fa".format(dataset),
+            "mafft --op 2 --thread $CPUS --auto $SOURCE > $TARGET")
+    Command("{}.fa".format(dataset),
+            ["trim-gaps.R", "{}.mafft.fa".format(dataset)],
+            "Rscript $SOURCES $TARGET")
+
+# vim: syntax=python expandtab sw=4 ts=4

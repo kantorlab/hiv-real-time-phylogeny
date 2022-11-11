@@ -1,0 +1,18 @@
+Import("*")
+
+for alignment in alignments:
+    for dataset in datasets:
+        Command("{}.{}.csv".format(alignment, dataset),
+                ["edit-distance.py",
+                 "$ANALYSIS/alignments/{}/{}.fa".format(alignment, dataset),
+                Value(new_seq_start)],
+                "python $SOURCES $TARGET",
+                mem_per_cpu=20,
+                timelimit="24:00:00")
+        Command("{}.{}.pdf".format(alignment, dataset),
+                ["plot-by-subtype.py",
+                 "{}.{}.csv".format(alignment, dataset),
+                 "$ANALYSIS/preprocessors/sierra/{}.csv".format(dataset)],
+                "python $SOURCES $TARGET")
+
+# vim: syntax=python expandtab sw=4 ts=4

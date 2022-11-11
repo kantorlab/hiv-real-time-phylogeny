@@ -1,0 +1,11 @@
+Import("*")
+
+for dataset in datasets:
+    Command("{}.csv".format(dataset),
+            ["sierra.py",
+             "$DATASETS/{}/sequences.csv".format(dataset),
+             "$DATASETS/{}/sierra.json".format(dataset)],
+            "python $SOURCES $TARGET",
+            mem_per_cpu=12)
+
+# vim: syntax=python expandtab sw=4 ts=4

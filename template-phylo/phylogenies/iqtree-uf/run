@@ -1,0 +1,14 @@
+Import("*")
+
+for alignment in alignments:
+    for dataset in datasets:
+        name = "{}.{}".format(alignment, dataset)
+        Command(["{}.iqtree".format(name),
+                 "{}.treefile".format(name),
+                 "{}.log".format(name)],
+                "$ANALYSIS/alignments/{}/{}.fa".format(alignment, dataset),
+                "iqtree2 -s $SOURCE -st DNA -m GTR+F+G -B 1000 -T AUTO -mem 12G -o O.BE.87.ANT70.L20587 -pre $ANALYSIS/phylogenies/iqtree-uf/{}".format(name),
+                cpus=4,
+                timelimit="7-00:00:00")
+
+# vim: syntax=python expandtab sw=4 ts=4

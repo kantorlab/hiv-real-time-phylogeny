@@ -1,0 +1,26 @@
+Import("*")
+
+for dataset in datasets:
+
+    Command(["{}.Apobec.html".format(dataset),
+             "{}.StopCodon.html".format(dataset),
+             "{}.Unusual.html".format(dataset)],
+            ["sierra.py",
+             "$ANALYSIS/preprocessors/sierra/{}.csv".format(dataset),
+             "bootstrap.min.css",
+             Value(new_seq_start)],
+            "python $SOURCES ${TARGETS[0]} ${TARGETS[1]} ${TARGETS[2]}")
+
+    for alignment in alignments:
+        Command(["{}.{}.SameSubtypeLow.html".format(alignment, dataset),
+                 "{}.{}.SameSubtypeHigh.html".format(alignment, dataset),
+                 "{}.{}.DiffSubtypeLow.html".format(alignment, dataset)],
+                ["edit-distance.py",
+                 "$ANALYSIS/qc/edit-distance/{}.{}.csv".format(alignment, dataset),
+                 "$ANALYSIS/alignments/{}/{}.fa".format(alignment, dataset),
+                 "$ANALYSIS/preprocessors/sierra/{}.csv".format(dataset),
+                 "bootstrap.min.css"],
+                "python $SOURCES ${TARGETS[0]} ${TARGETS[1]} ${TARGETS[2]}",
+               mem_per_cpu=20)
+
+# vim: syntax=python expandtab sw=4 ts=4

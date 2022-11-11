@@ -1,0 +1,38 @@
+# Setup
+
+SConscript("scons/setup")
+
+# Datasets
+
+Export(datasets=[INSERT_DATASET_NAME_HERE])
+Export(new_seq_start=INSERT_START_SEQUENCE_ID_HERE)
+
+# Preprocessors
+
+Export(preprocessors=["sierra", "latest-cd4"])
+
+# Alignments
+
+Export(alignments=["mafft"])
+
+# QC
+
+Export(qc=[])
+
+# Phylogenies
+
+Export(phylogenies=["raxml", "iqtree-uf", "fasttree", "fasttree-alrt", "mega"])
+
+# Clusters
+
+Export(clusters=["hivtrace", "clusterpicker"])
+
+# Reports
+
+Export(reports=["cdc-concern", "cluster-overlay", "summary", "individual"])
+
+# Run
+
+SConscript("scons/run")
+
+# vim: syntax=python expandtab sw=4 ts=4

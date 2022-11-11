@@ -1,0 +1,13 @@
+Import("*")
+
+for alignment in alignments:
+    for dataset in datasets:
+        name = "{}.{}".format(alignment, dataset)
+        Command(["{}.nwk".format(name)],
+                ["ml-settings.mao",
+                 "$ANALYSIS/alignments/{}/{}.fa".format(alignment, dataset)],
+                "megacc -a ${SOURCES[0]} -d ${SOURCES[1]} -o $TARGET",
+                cpus=16,
+                timelimit="7-00:00:00")
+
+# vim: syntax=python expandtab sw=4 ts=4

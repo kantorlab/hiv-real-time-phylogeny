@@ -1,0 +1,27 @@
+Import("*")
+
+for dataset in datasets:
+
+    Command("{}.individuals.csv".format(dataset),
+            ["individuals.py",
+             "$ANALYSIS/clusters/clusterpicker/mafft.{}.clusters.tsv".format(dataset),
+             "$ANALYSIS/reports/cdc-concern/{}.hivtrace.csv".format(dataset),
+             "$ANALYSIS/clusters/hivtrace/{}.015.clusters.tsv".format(dataset),
+             "$DATASETS/{}/patients.csv".format(dataset),
+             "$DATASETS/{}/sequences.csv".format(dataset),
+             "$ANALYSIS/preprocessors/sierra/{}.csv".format(dataset),
+             "$ANALYSIS/preprocessors/recency/{}.csv".format(dataset),
+             "$DATASETS/{}/pvl.csv".format(dataset)],
+            "python $SOURCES $TARGET")
+
+    Command("{}_Individual_Reports.tex".format(dataset),
+            ["report.py",
+             "{}.individuals.csv".format(dataset),
+             "$ANALYSIS/phylogenies/raxml/RAxML_bipartitionsBranchLabels.mafft.{}".format(dataset),
+             "plot.R",
+             "$DATASETS/{}/new_seq_ids.csv".format(dataset),
+             "$DATASETS/{}/treatment.csv".format(dataset),
+             Value(dataset)],
+            "python $SOURCES $TARGET")
+
+# vim: syntax=python expandtab sw=4 ts=4

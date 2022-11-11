@@ -1,0 +1,29 @@
+#############################################################################
+###                             DO NOT EDIT                               ###
+#############################################################################
+#
+# You should not need to modify this file, unless making major changes
+# to the design of the analysis framework.
+#
+
+Import("*")
+
+for preprocessor in preprocessors:
+    env.SConscript("$ANALYSIS/preprocessors/{}/run".format(preprocessor))
+
+for alignment in alignments:
+    env.SConscript("$ANALYSIS/alignments/{}/run".format(alignment))
+
+for q in qc:
+    env.SConscript("$ANALYSIS/qc/{}/run".format(q))
+
+for phylogeny in phylogenies:
+    env.SConscript("$ANALYSIS/phylogenies/{}/run".format(phylogeny))
+
+for cluster in clusters:
+    env.SConscript("$ANALYSIS/clusters/{}/run".format(cluster))
+
+for report in reports:
+    env.SConscript("$ANALYSIS/reports/{}/run".format(report))
+
+# vim: syntax=python expandtab sw=4 ts=4
