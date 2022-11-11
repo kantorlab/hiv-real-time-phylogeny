@@ -1,9 +1,12 @@
-# Automated Bioformatics Pipeline for Near-Real-Time Public-Health Responses to New HIV Diagnoses
+# Automated bioformatics pipeline for near-real-time public-health responses to new HIV diagnoses
 
 This software is described in further detail in the manuscript:
 
-> M. Howison, et al. 2022. Informing near-real-time public-health responses
-> to new HIV diagnoses in a statewide HIV epidemic
+> Mark Howison, Fizza S Gillani, Vlad Novitsky, Jon A Steingrimsson, John Fulton,
+> Thomas Bertrand, Katharine Howe, Anna Civitarese, Lila Bhattarai, Meghan MacAskill,
+> Guillermo Ronquillo, Joel Hague, Casey Dunn, Utpala Bandy, Joseph W Hogan,
+> Rami Kantor. (2022). Informing near-real-time public-health responses
+> to new HIV diagnoses in a statewide HIV epidemic.
 
 Through a unique academic-public-health partnership, we developed an automated,
 open-source pipeline and applied it to prospective, routine analysis of statewide
@@ -50,9 +53,9 @@ use subdirectories in your current directory with:
 
 The pipeline is designed to operate on a **dataset** that you place in the `RTP_DATASETS`
 directory. Typically, the dataset would be updated or generated on a near-real-time schedule,
-such as every month or week. The dataset must be named using the schema `D{n}_{YYYYMMDD}_V{m}`
+such as every month or week. The dataset must be named using the schema `D{n}_{YYYYMMDD}_V{v}`
 where `n` is an accession number starting at 1, `YYYYMMDD` is the most recent sequencing date
-for sequences in the dataset, and `m` is a versioning number starting at 1. For a typical
+for sequences in the dataset, and `v` is a versioning number starting at 1. For a typical
 run of the pipeline, the `V1` version will contain **all available sequences for all indivdiuals**
 and is used for quality control. The `V2` will contain **one sequence (the oldest available sequence)
 per individual** and is used for phylogenetic analysis. For example, say this is your first run
@@ -69,6 +72,7 @@ for a distinct sequence). The `SequenceID` **must have the format** `{StudyID}_{
 starting at 1.
 
 **patients.csv** - a table with one row per StudyID and fields:
+
     * `StudyID`
     * `Gender` (coded with 1=Male, 2=Female, 3=Transgender)
     * `Ethnicity` (coded with 1=Hispanic, 2=Non-Hispanic)
@@ -91,6 +95,7 @@ starting at 1.
 **sequences.csv** - a table with one row per SequenceID (including **all sequences for quality
 control analyses** but **only the earliest available sequence per StudyID for phylogenetic
 analyses**) and fields:
+
     * `SequenceID`
     * `StudyID`
     * `AgeAtSeq`
@@ -101,6 +106,7 @@ analyses**) and fields:
 
 **new_seq_ids.csv** - the SequenceID values from the **sequences.csv** file that are newly acquired
 since the previuos analysis, with fields:
+
     * `StudyID`
     * `SequenceID`
     * `Date` (date of sequencing; *YYYY-MM-DD* format)
@@ -112,11 +118,13 @@ The FASTA header text for each sequence **must be equal to the** `SequenceID`.
 (sierrapy)[https://pypi.org/project/sierrapy/] client for the Stanford HIVdb Sierra algorithm.
 
 **cd4.csv** - a long table (multiple observations per StudyID) of clinical CD4 results with fields:
+
     * `StudyID`
     * `Date` (date of clinical result; *MM/DD/YYYY* format)
     * `CD4` (clinical value)
 
 **pvl.csv** - a long table (multiple observations per StudyID) of clinical viral load results with fields:
+
     * `StudyID`
     * `Date` (date of clinical result; *MM/DD/YYYY* format)
     * `PVL` (clinical value)
