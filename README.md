@@ -73,61 +73,61 @@ starting at 1.
 
 **patients.csv** - a table with one row per StudyID and fields:
 
-    * `StudyID`
-    * `Gender` (coded with 1=Male, 2=Female, 3=Transgender)
-    * `Ethnicity` (coded with 1=Hispanic, 2=Non-Hispanic)
-    * `Race` (coded with 1=White, 2=Black, 3=Asian, 4=Other)
-    * `HIVDxDate` (date of HIV diagnosis; *MM/DD/YYYY* format)
-    * `HIVDxYear` (year of HIV diagnosis; *YYYY* format)
-    * `PrimaryRiskFactor` (a comma-separated list of risk factor labels for the individual)
-    * `MSM` (0/1 indicator if MSM is a risk factor for the individual)
-    * `EverAtACI` (0/1 indicator if the individual has been previously incarcerated)
-    * `EverSubstanceUse` (0/1 indicator if the individual has a known history of controlled substance use)
-    * `EverPsychotic` (0/1 indicator if the individual has a previous diagnosis of a mental health condition)
-    * `EverIDU` (0/1 indicator if the individual has a known history of intraveneous drug use)
-    * `YearOfLastNegativeTest` (year of last known HIV negative test result; *YYYY* format)
-    * `CountryOfBirth` (country name or abbreviation)
-    * `AgeAtDx` (age at the date of HIV diagnosis)
-    * `HIVDx6mo` (0/1 indicator if the HIV diagnosis date was in the previous 6 months)
-    * `HIVDx12mo` (0/1 indicator if the HIV diagnosis date was in the previous 12 months)
-    * `HIVDx18mo` (0/1 indicator if the HIV diagnosis date was in the previous 18 months)
+* `StudyID`
+* `Gender` (coded with 1=Male, 2=Female, 3=Transgender)
+* `Ethnicity` (coded with 1=Hispanic, 2=Non-Hispanic)
+* `Race` (coded with 1=White, 2=Black, 3=Asian, 4=Other)
+* `HIVDxDate` (date of HIV diagnosis; *MM/DD/YYYY* format)
+* `HIVDxYear` (year of HIV diagnosis; *YYYY* format)
+* `PrimaryRiskFactor` (a comma-separated list of risk factor labels for the individual)
+* `MSM` (0/1 indicator if MSM is a risk factor for the individual)
+* `EverAtACI` (0/1 indicator if the individual has been previously incarcerated)
+* `EverSubstanceUse` (0/1 indicator if the individual has a known history of controlled substance use)
+* `EverPsychotic` (0/1 indicator if the individual has a previous diagnosis of a mental health condition)
+* `EverIDU` (0/1 indicator if the individual has a known history of intraveneous drug use)
+* `YearOfLastNegativeTest` (year of last known HIV negative test result; *YYYY* format)
+* `CountryOfBirth` (country name or abbreviation)
+* `AgeAtDx` (age at the date of HIV diagnosis)
+* `HIVDx6mo` (0/1 indicator if the HIV diagnosis date was in the previous 6 months)
+* `HIVDx12mo` (0/1 indicator if the HIV diagnosis date was in the previous 12 months)
+* `HIVDx18mo` (0/1 indicator if the HIV diagnosis date was in the previous 18 months)
 
 **sequences.csv** - a table with one row per SequenceID (including **all sequences for quality
 control analyses** but **only the earliest available sequence per StudyID for phylogenetic
 analyses**) and fields:
 
-    * `SequenceID`
-    * `StudyID`
-    * `AgeAtSeq`
-    * `Year` (year of sequencing; *YYYY* format)
-    * `Date` (date of sequencing; *YYYY-MM-DD* format)
-    * `TreatmentStatus`
-    * `Length` (nucleotide length of the sequence)
+* `SequenceID`
+* `StudyID`
+* `AgeAtSeq`
+* `Year` (year of sequencing; *YYYY* format)
+* `Date` (date of sequencing; *YYYY-MM-DD* format)
+* `TreatmentStatus`
+* `Length` (nucleotide length of the sequence)
 
 **new_seq_ids.csv** - the SequenceID values from the **sequences.csv** file that are newly acquired
 since the previuos analysis, with fields:
 
-    * `StudyID`
-    * `SequenceID`
-    * `Date` (date of sequencing; *YYYY-MM-DD* format)
+* `StudyID`
+* `SequenceID`
+* `Date` (date of sequencing; *YYYY-MM-DD* format)
 
 **sequences.fa** - a FASTA file containing the nucleotide sequences listed in **sequences.csv**.
 The FASTA header text for each sequence **must be equal to the** `SequenceID`.
 
 **sierra.json** - the result of processing **sequences.fa** with the
-(sierrapy)[https://pypi.org/project/sierrapy/] client for the Stanford HIVdb Sierra algorithm.
+[sierrapy](https://pypi.org/project/sierrapy/) client for the Stanford HIVdb Sierra algorithm.
 
 **cd4.csv** - a long table (multiple observations per StudyID) of clinical CD4 results with fields:
 
-    * `StudyID`
-    * `Date` (date of clinical result; *MM/DD/YYYY* format)
-    * `CD4` (clinical value)
+* `StudyID`
+* `Date` (date of clinical result; *MM/DD/YYYY* format)
+* `CD4` (clinical value)
 
 **pvl.csv** - a long table (multiple observations per StudyID) of clinical viral load results with fields:
 
-    * `StudyID`
-    * `Date` (date of clinical result; *MM/DD/YYYY* format)
-    * `PVL` (clinical value)
+* `StudyID`
+* `Date` (date of clinical result; *MM/DD/YYYY* format)
+* `PVL` (clinical value)
 
 ## Running analyses
 
