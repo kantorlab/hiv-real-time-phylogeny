@@ -4,7 +4,7 @@ SConscript("scons/setup")
 
 # Datasets
 
-Export(datasets=[INSERT_DATASET_NAME_HERE])
+Export(datasets=["INSERT_DATASET_NAME_HERE"])
 Export(new_seq_start=INSERT_START_SEQUENCE_ID_HERE)
 
 # Preprocessors
